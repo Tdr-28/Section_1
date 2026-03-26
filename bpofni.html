@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probleme de informatică | pbinfo.ro</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue-dark: #1a3a5c;
+    --blue-mid: #2563a8;
+    --blue-light: #3b82c4;
+    --blue-nav: #1e4d8c;
+    --blue-nav-hover: #163a6e;
+    --accent: #e8a020;
+    --accent2: #27ae60;
+    --bg: #f4f6f9;
+    --bg-card: #ffffff;
+    --border: #d0d9e8;
+    --text: #1a2535;
+    --text-muted: #5a7080;
+    --text-light: #8fa8bb;
+    --red: #c0392b;
+    --green: #1e8a40;
+    --code-bg: #1e2d3d;
+    --code-text: #a8d8ff;
+    --sidebar-w: 240px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  a { color: var(--blue-mid); text-decoration: none; }
+  a:hover { text-decoration: underline; color: var(--blue-dark); }
+
+  /* ======= NAVBAR ======= */
+  #navbar {
+    background: var(--blue-nav);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    height: 46px;
+    padding: 0 12px;
+    gap: 0;
+  }
+
+  .nav-brand {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    padding-right: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .nav-brand span { color: var(--accent); }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    height: 100%;
+    flex: 1;
+  }
+
+  .nav-menu > li {
+    position: relative;
+    height: 100%;
+  }
+
+  .nav-menu > li > a,
+  .nav-menu > li > span {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 14px;
+    color: rgba(255,255,255,0.92);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+
+  .nav-menu > li:hover > a,
+  .nav-menu > li:hover > span {
+    background: var(--blue-nav-hover);
+    color: #fff;
+  }
+
+  .nav-menu > li > span::after {
+    content: ' ▾';
+    font-size: 10px;
+    margin-left: 3px;
+    opacity: 0.8;
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blue-mid);
+    min-width: 230px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    z-index: 2000;
+  }
+
+  .nav-menu > li:hover .dropdown { display: block; }
+
+  .dropdown a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text);
+    font-size: 13px;
+    border-bottom: 1px solid #f0f3f7;
+    transition: background 0.1s;
+  }
+
+  .dropdown a:hover {
+    background: #eef4fb;
+    text-decoration: none;
+    color: var(--blue-mid);
+  }
+
+  .nav-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-nav {
+    padding: 5px 14px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-login {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .btn-login:hover { background: rgba(255,255,255,0.12); }
+
+  .btn-register {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-register:hover { background: #d4911a; }
+
+  /* ======= LAYOUT ======= */
+  #app { max-width: 1200px; margin: 0 auto; padding: 0 12px; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ======= HERO ======= */
+  .hero {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%);
+    color: #fff;
+    padding: 28px 32px;
+    margin: 16px 0 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .hero-text h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .hero-text p { font-size: 14px; opacity: 0.88; max-width: 600px; line-height: 1.6; }
+
+  .hero-joke {
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 14px 18px;
+    max-width: 320px;
+    font-size: 13px;
+    margin-left: auto;
+    border-left: 3px solid var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hero-joke strong { display: block; margin-bottom: 4px; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ======= HOME GRID ======= */
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 300px;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: var(--blue-dark);
+    color: #fff;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-header a { color: rgba(255,255,255,0.75); font-size: 11px; font-weight: 400; }
+  .card-header a:hover { color: #fff; text-decoration: none; }
+
+  .card-body { padding: 10px 14px; }
+
+  .prob-list { list-style: none; }
+  .prob-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f3f7;
+    font-size: 13px;
+  }
+  .prob-list li:last-child { border-bottom: none; }
+  .prob-list li a { color: var(--blue-mid); }
+  .prob-list li a:hover { color: var(--blue-dark); }
+
+  .mai-mult {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    padding: 6px 14px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: #f8fafc;
+  }
+
+  /* ======= SIDEBAR WIDGETS ======= */
+  .sidebar-widget { margin-bottom: 14px; }
+
+  .blockly-banner {
+    background: linear-gradient(135deg, #1565c0, #0d47a1);
+    color: #fff;
+    padding: 16px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .blockly-banner h3 { font-size: 15px; margin-bottom: 4px; }
+  .blockly-banner p { font-size: 12px; opacity: 0.85; }
+  .blockly-banner .blockly-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .top100-list { list-style: none; }
+  .top100-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f3f7;
+    font-size: 12.5px;
+  }
+
+  .rank {
+    width: 20px;
+    text-align: right;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .rank.gold { color: #e8a020; }
+  .rank.silver { color: #aaa; }
+  .rank.bronze { color: #c87533; }
+
+  .avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .score-badge {
+    margin-left: auto;
+    background: var(--blue-dark);
+    color: #fff;
+    font-size: 11px;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* ======= NEWS ======= */
+  .news-section { margin-top: 6px; }
+  .news-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .news-item h4 { font-size: 15px; color: var(--blue-dark); margin-bottom: 6px; font-weight: 700; }
+  .news-item .news-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  .news-item p { font-size: 13px; line-height: 1.65; }
+
+  /* ======= PROBLEMS PAGE ======= */
+  .problems-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    gap: 18px;
+    margin-top: 16px;
+  }
+
+  .sidebar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    align-self: start;
+  }
+
+  .sidebar-title {
+    background: var(--blue-dark);
+    color: #fff;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .cat-list { list-style: none; }
+  .cat-list li a {
+    display: block;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid #f0f3f7;
+    transition: background 0.1s;
+  }
+  .cat-list li a:hover, .cat-list li a.active {
+    background: #eef4fb;
+    color: var(--blue-mid);
+    text-decoration: none;
+  }
+  .cat-list li a.active { font-weight: 700; border-left: 3px solid var(--blue-mid); }
+
+  .cat-count {
+    float: right;
+    background: var(--border);
+    border-radius: 10px;
+    padding: 0 7px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ======= PROBLEMS TABLE ======= */
+  .problems-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .problems-header h2 { font-size: 17px; font-weight: 700; color: var(--blue-dark); }
+
+  .breadcrumb {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .breadcrumb a { color: var(--blue-mid); }
+
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .search-bar input {
+    flex: 1;
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+  }
+  .search-bar input:focus { border-color: var(--blue-mid); }
+
+  .btn {
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--blue-mid); color: #fff; }
+  .btn-primary:hover { background: var(--blue-dark); }
+  .btn-success { background: var(--green); color: #fff; }
+  .btn-success:hover { background: #166d32; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  th {
+    background: var(--blue-dark);
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12.5px;
+  }
+
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f3f7;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f5f8fd; }
+
+  .diff-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .diff-easy { background: #d4edda; color: #155724; }
+  .diff-medium { background: #fff3cd; color: #856404; }
+  .diff-hard { background: #f8d7da; color: #721c24; }
+
+  .solved-icon { color: var(--green); font-size: 15px; }
+  .unsolved-icon { color: var(--text-muted); font-size: 15px; }
+
+  .tag {
+    display: inline-block;
+    background: #e8f0fb;
+    color: var(--blue-mid);
+    border-radius: 3px;
+    padding: 1px 7px;
+    font-size: 11px;
+    margin: 1px;
+  }
+
+  /* ======= PROBLEM PAGE ======= */
+  .problem-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 18px;
+    margin-top: 16px;
+  }
+
+  .problem-statement {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 20px 24px;
+  }
+
+  .problem-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blue-dark);
+    margin-bottom: 6px;
+  }
+
+  .problem-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .problem-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--blue-dark);
+    margin: 18px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .io-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .io-box {
+    background: #f5f8fc;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .io-box h5 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .io-box pre {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12.5px;
+    background: transparent;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .example-box {
+    background: #f0f4fa;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .example-header {
+    background: #dde8f5;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue-dark);
+  }
+
+  .example-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .example-col {
+    padding: 10px 12px;
+    border-right: 1px solid var(--border);
+  }
+  .example-col:last-child { border-right: none; }
+  .example-col h6 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .example-col pre {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12.5px;
+    margin: 0;
+  }
+
+  /* ======= SUBMIT PANEL ======= */
+  .submit-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    align-self: start;
+  }
+
+  .submit-panel .panel-header {
+    background: var(--blue-dark);
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .submit-panel .panel-body { padding: 14px; }
+
+  .form-group { margin-bottom: 12px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 0.3px;
+  }
+
+  select, textarea {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    background: #fff;
+  }
+
+  select:focus, textarea:focus { border-color: var(--blue-mid); }
+
+  textarea {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    min-height: 220px;
+    resize: vertical;
+    background: var(--code-bg);
+    color: var(--code-text);
+    line-height: 1.5;
+  }
+
+  .verdict-box {
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .verdict-ac { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+  .verdict-wa { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  .verdict-tle { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+  .verdict-pending { background: #e2e8f0; color: #4a5568; border: 1px solid #cbd5e0; }
+
+  .verdict-box strong { display: block; font-size: 14px; margin-bottom: 3px; }
+
+  /* ======= ARTICLES ======= */
+  .articles-layout {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    gap: 18px;
+    margin-top: 16px;
+  }
+
+  .article-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    transition: box-shadow 0.15s;
+    cursor: pointer;
+  }
+
+  .article-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+
+  .article-card h3 {
+    font-size: 15px;
+    color: var(--blue-mid);
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+
+  .article-card h3:hover { color: var(--blue-dark); text-decoration: underline; }
+
+  .article-card .art-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .article-card p { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  .article-full {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 24px 28px;
+  }
+
+  .article-full h1 { font-size: 22px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; }
+  .article-full .art-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .article-full p { font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
+  .article-full h2 { font-size: 17px; font-weight: 700; color: var(--blue-dark); margin: 20px 0 10px; }
+  .article-full h3 { font-size: 15px; font-weight: 700; margin: 16px 0 8px; }
+  .article-full pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 14px 16px;
+    border-radius: 4px;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12.5px;
+    overflow-x: auto;
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+
+  .article-full ul { padding-left: 24px; margin-bottom: 12px; font-size: 14px; line-height: 1.7; }
+
+  /* ======= SOLUTIONS PAGE ======= */
+  .solutions-table td { font-family: 'Source Code Pro', monospace; font-size: 12px; }
+  .solutions-table td:first-child { font-family: inherit; font-size: 13px; }
+
+  .score-100 { color: var(--green); font-weight: 700; }
+  .score-part { color: var(--accent); font-weight: 700; }
+  .score-0 { color: var(--red); font-weight: 700; }
+
+  /* ======= FOOTER ======= */
+  footer {
+    background: var(--blue-dark);
+    color: rgba(255,255,255,0.75);
+    text-align: center;
+    padding: 18px;
+    margin-top: 30px;
+    font-size: 12px;
+  }
+
+  footer a { color: rgba(255,255,255,0.6); }
+  footer a:hover { color: #fff; }
+
+  /* ======= TABS ======= */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .tab {
+    padding: 8px 18px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s;
+  }
+
+  .tab.active {
+    color: var(--blue-mid);
+    border-bottom-color: var(--blue-mid);
+  }
+
+  .tab:hover { color: var(--blue-dark); }
+
+  /* ======= PAGINATION ======= */
+  .pagination {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+
+  .page-btn {
+    padding: 5px 11px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--blue-mid);
+    transition: all 0.1s;
+  }
+
+  .page-btn:hover, .page-btn.active {
+    background: var(--blue-mid);
+    color: #fff;
+    border-color: var(--blue-mid);
+  }
+
+  /* ======= MODAL ======= */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 360px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    overflow: hidden;
+  }
+
+  .modal-header {
+    background: var(--blue-dark);
+    color: #fff;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header button {
+    background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; opacity: 0.7; line-height: 1;
+  }
+
+  .modal-body { padding: 20px 20px 10px; }
+  .modal-body .form-group { margin-bottom: 14px; }
+  .modal-body label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+  .modal-body input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+  }
+  .modal-body input:focus { border-color: var(--blue-mid); }
+  .modal-footer { padding: 10px 20px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .modal-footer .btn { width: 100%; text-align: center; }
+
+  /* ======= NOTICE BAR ======= */
+  .notice-bar {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: #856404;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* ======= RESPONSIVE ======= */
+  @media (max-width: 900px) {
+    .home-grid { grid-template-columns: 1fr 1fr; }
+    .problem-layout { grid-template-columns: 1fr; }
+    .problems-layout, .articles-layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .home-grid { grid-template-columns: 1fr; }
+    .io-table { grid-template-columns: 1fr; }
+    .example-cols { grid-template-columns: 1fr; }
+  }
+
+  /* ======= UTILS ======= */
+  .mt-0 { margin-top: 0 !important; }
+  .text-center { text-align: center; }
+  .text-muted { color: var(--text-muted); }
+  .bold { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand" onclick="navigate('home')">pb<span>Info</span>.ro</div>
+    <ul class="nav-menu">
+      <li>
+        <span>Probleme</span>
+        <div class="dropdown">
+          <a href="#" onclick="navigate('problems','9');return false;">Probleme – clasa a IX-a</a>
+          <a href="#" onclick="navigate('problems','10');return false;">Probleme – clasa a X-a</a>
+          <a href="#" onclick="navigate('problems','11');return false;">Probleme – clasa a XI-a</a>
+          <a href="#" onclick="navigate('problems','concurs');return false;">Probleme din concursuri</a>
+          <a href="#" onclick="navigate('problems','toate');return false;">Căutare problemă</a>
+          <a href="#" onclick="navigate('problems','exercitii');return false;">Exerciții</a>
+        </div>
+      </li>
+      <li><a href="#" onclick="navigate('solutions');return false;">Soluții</a></li>
+      <li>
+        <span>Resurse</span>
+        <div class="dropdown">
+          <a href="#" onclick="navigate('articles','9');return false;">Resurse pentru clasa a IX-a</a>
+          <a href="#" onclick="navigate('articles','10');return false;">Resurse pentru clasa a X-a</a>
+          <a href="#" onclick="navigate('articles','11');return false;">Resurse pentru clasa a XI-a</a>
+          <a href="#" onclick="navigate('articles','rec');return false;">Articole recomandate</a>
+          <a href="#" onclick="navigate('articles','bac');return false;">Subiecte bacalaureat</a>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn-nav btn-login" onclick="openModal('login')">Autentificare</button>
+      <button class="btn-nav btn-register" onclick="openModal('register')">Înregistrare</button>
+    </div>
+  </div>
+</nav>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- ===== HOME PAGE ===== -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-text">
+        <h1>pbInfo.ro – Informatică pentru toți</h1>
+        <p>Rezolvă probleme de informatică cu evaluator automat. Află imediat dacă soluția ta este corectă. Probleme grupate după programa de informatică pentru liceu, accesibile oricui.</p>
+        <p style="margin-top:8px; font-size:13px; opacity:0.75;">C, C++, Pascal, Python, Java, C# · Evaluare automată · Clase 9–11 și concursuri</p>
+      </div>
+      <div class="hero-joke">
+        <strong>💡 Știați că...</strong>
+        De ce confundă programatorii Halloween-ul cu Crăciunul?<br>
+        <span style="font-style:italic; opacity:0.85;">Pentru că Oct 31 = Dec 25!</span>
+      </div>
+    </div>
+
+    <div class="notice-bar">
+      ℹ️ Dacă ați rezolvat o problemă și nu apare imediat ca rezolvată, aveți răbdare — va apărea în cel mult 10 minute!
+    </div>
+
+    <div class="home-grid">
+      <!-- Clasa 9 -->
+      <div class="card">
+        <div class="card-header">
+          Ultimele probleme, clasa a IX-a
+          <a href="#" onclick="navigate('problems','9');return false;">Mai mult</a>
+        </div>
+        <div class="card-body">
+          <ul class="prob-list">
+            <li><a href="#" onclick="navigate('problem','coddecod');return false;">coddecod</a></li>
+            <li><a href="#" onclick="navigate('problem','deceneu');return false;">Deceneu</a></li>
+            <li><a href="#" onclick="navigate('problem','burebista');return false;">Burebista</a></li>
+            <li><a href="#" onclick="navigate('problem','mario2');return false;">Mario2</a></li>
+            <li><a href="#" onclick="navigate('problem','algocoin');return false;">algocoin</a></li>
+          </ul>
+        </div>
+        <a class="mai-mult" href="#" onclick="navigate('problems','9');return false;">Mai mult ›</a>
+      </div>
+
+      <!-- Clasa 10 -->
+      <div class="card">
+        <div class="card-header">
+          Ultimele probleme, clasa a X-a
+          <a href="#" onclick="navigate('problems','10');return false;">Mai mult</a>
+        </div>
+        <div class="card-body">
+          <ul class="prob-list">
+            <li><a href="#" onclick="navigate('problem','mister');return false;">Mister</a></li>
+            <li><a href="#" onclick="navigate('problem','inghetata');return false;">Inghetata</a></li>
+            <li><a href="#" onclick="navigate('problem','unuzero1');return false;">unuzero1</a></li>
+            <li><a href="#" onclick="navigate('problem','pisicesc');return false;">pisicesc</a></li>
+            <li><a href="#" onclick="navigate('problem','minish');return false;">minish</a></li>
+          </ul>
+        </div>
+        <a class="mai-mult" href="#" onclick="navigate('problems','10');return false;">Mai mult ›</a>
+      </div>
+
+      <!-- Clasa 11 -->
+      <div class="card">
+        <div class="card-header">
+          Ultimele probleme, clasa a XI-a
+          <a href="#" onclick="navigate('problems','11');return false;">Mai mult</a>
+        </div>
+        <div class="card-body">
+          <ul class="prob-list">
+            <li><a href="#" onclick="navigate('problem','eliberare');return false;">Eliberare</a></li>
+            <li><a href="#" onclick="navigate('problem','knight');return false;">Knight</a></li>
+            <li><a href="#" onclick="navigate('problem','rotatii');return false;">rotatii</a></li>
+            <li><a href="#" onclick="navigate('problem','crossword');return false;">Crossword</a></li>
+            <li><a href="#" onclick="navigate('problem','esentiale');return false;">esentiale</a></li>
+          </ul>
+        </div>
+        <a class="mai-mult" href="#" onclick="navigate('problems','11');return false;">Mai mult ›</a>
+      </div>
+
+      <!-- Sidebar -->
+      <div>
+        <!-- Blockly -->
+        <div class="blockly-banner" onclick="alert('Blockly – mediu vizual de programare')">
+          <div class="blockly-icon">🧩</div>
+          <h3>Programează cu <strong>Blockly</strong></h3>
+          <p>Mediu de programare vizual, gândit special pentru începători!</p>
+        </div>
+
+        <!-- Top 100 -->
+        <div class="card sidebar-widget">
+          <div class="card-header">
+            Top utilizatori
+            <a href="#" onclick="navigate('top');return false;">Top 100</a>
+          </div>
+          <div class="card-body" style="padding:8px 14px">
+            <ul class="top100-list">
+              <li><span class="rank gold">1.</span><div class="avatar">AM</div><span>alexmircea</span><span class="score-badge">4821</span></li>
+              <li><span class="rank silver">2.</span><div class="avatar" style="background:#6c47b0">RI</div><span>raduion</span><span class="score-badge">4507</span></li>
+              <li><span class="rank bronze">3.</span><div class="avatar" style="background:#2e7d32">SP</div><span>stefanpop</span><span class="score-badge">4193</span></li>
+              <li><span class="rank">4.</span><div class="avatar" style="background:#c0392b">ME</div><span>mihaelae</span><span class="score-badge">3988</span></li>
+              <li><span class="rank">5.</span><div class="avatar" style="background:#e67e22">CV</div><span>catalinv</span><span class="score-badge">3712</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Articles preview -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-header">
+        Ultimele articole recomandate
+        <a href="#" onclick="navigate('articles','rec');return false;">Mai mult</a>
+      </div>
+      <div class="card-body" style="display:flex; flex-wrap:wrap; gap:6px; padding:12px 14px;">
+        <a href="#" onclick="navigate('article','aranjamente');return false;" class="tag" style="font-size:13px; padding:4px 12px;">Generarea aranjamentelor</a>
+        <a href="#" onclick="navigate('article','polimorfism');return false;" class="tag" style="font-size:13px; padding:4px 12px;">Polimorfism în C++</a>
+        <a href="#" onclick="navigate('article','putere');return false;" class="tag" style="font-size:13px; padding:4px 12px;">Ridicarea la putere rapidă</a>
+        <a href="#" onclick="navigate('article','stars');return false;" class="tag" style="font-size:13px; padding:4px 12px;">Stars and bars</a>
+        <a href="#" onclick="navigate('article','bitset');return false;" class="tag" style="font-size:13px; padding:4px 12px;">C++ STL bitset</a>
+        <a href="#" onclick="navigate('article','vector');return false;" class="tag" style="font-size:13px; padding:4px 12px;">C++ vector – scurt tutorial</a>
+        <a href="#" onclick="navigate('article','stl');return false;" class="tag" style="font-size:13px; padding:4px 12px;">STL – Concepte fundamentale</a>
+        <a href="#" onclick="navigate('article','html-culori');return false;" class="tag" style="font-size:13px; padding:4px 12px;">HTML – culori</a>
+      </div>
+    </div>
+
+    <!-- News -->
+    <div class="news-section">
+      <div class="news-item">
+        <h4>IT MARATHON XIV</h4>
+        <div class="news-meta">Postat de <strong>silviu</strong> • 10 mar 2026</div>
+        <p>În weekendul 25–26 Aprilie, Liga Studenților Facultății de Automatică și Calculatoare Iași organizează "IT Marathon", un hackathon destinat elevilor și studenților, cu probe de Web Development, Desktop & Mobile, CTF, UI/UX și CPU Design.</p>
+      </div>
+      <div class="news-item">
+        <h4>FIICode 2026</h4>
+        <div class="news-meta">Postat de <strong>silviu</strong> • 22 feb 2026</div>
+        <p>Au început înscrierile la FIICode, concursul care îți testează abilitățile de programare. Competiția include: Web & Mobile, Game Development, Algoritmică, CTF și AI/ML. Accesați <a href="#">fiicode.asii.ro/ro</a> pentru detalii.</p>
+      </div>
+      <div class="news-item">
+        <h4>Discord RoAlgo</h4>
+        <div class="news-meta">Postat de <strong>dnprx</strong> • 15 mai 2023</div>
+        <p>Comunitatea RoAlgo vă invită pe serverul de Discord pentru discuții despre algoritmică și concursuri de informatică din România. <a href="#">discord.gg/E82gRbUBCJ</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROBLEMS PAGE ===== -->
+  <div class="page" id="page-problems">
+    <div class="problems-layout">
+      <!-- Sidebar -->
+      <div>
+        <div class="sidebar">
+          <div class="sidebar-title">Clase</div>
+          <ul class="cat-list">
+            <li><a href="#" id="cat-9" onclick="filterProblems('9');return false;">Clasa a IX-a <span class="cat-count">312</span></a></li>
+            <li><a href="#" id="cat-10" onclick="filterProblems('10');return false;">Clasa a X-a <span class="cat-count">198</span></a></li>
+            <li><a href="#" id="cat-11" onclick="filterProblems('11');return false;">Clasa a XI-a <span class="cat-count">143</span></a></li>
+            <li><a href="#" id="cat-concurs" onclick="filterProblems('concurs');return false;">Concursuri <span class="cat-count">87</span></a></li>
+            <li><a href="#" id="cat-toate" onclick="filterProblems('toate');return false;">Toate problemele <span class="cat-count">740</span></a></li>
+          </ul>
+        </div>
+        <br>
+        <div class="sidebar">
+          <div class="sidebar-title">Categorii clasa a IX-a</div>
+          <ul class="cat-list" id="subcats">
+            <li><a href="#">Variabile și operatori <span class="cat-count">28</span></a></li>
+            <li><a href="#">Instrucțiuni condiționale <span class="cat-count">34</span></a></li>
+            <li><a href="#">Instrucțiuni repetitive <span class="cat-count">56</span></a></li>
+            <li><a href="#">Tablouri unidimensionale <span class="cat-count">62</span></a></li>
+            <li><a href="#">Tablouri bidimensionale <span class="cat-count">41</span></a></li>
+            <li><a href="#">Șiruri de caractere <span class="cat-count">38</span></a></li>
+            <li><a href="#">Funcții <span class="cat-count">53</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div>
+        <div class="breadcrumb">pbinfo.ro / <span id="prob-breadcrumb">Probleme – clasa a IX-a</span></div>
+        <div class="problems-header">
+          <h2 id="prob-page-title">Probleme – clasa a IX-a</h2>
+        </div>
+
+        <div class="search-bar">
+          <input type="text" id="prob-search" placeholder="Caută problemă după nume sau număr..." oninput="filterTable()">
+          <button class="btn btn-primary" onclick="filterTable()">Caută</button>
+        </div>
+
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab(this,'data')">După dată</div>
+          <div class="tab" onclick="switchTab(this,'id')">După număr</div>
+          <div class="tab" onclick="switchTab(this,'name')">Alfabetic</div>
+          <div class="tab" onclick="switchTab(this,'diff')">Dificultate</div>
+        </div>
+
+        <table id="prob-table">
+          <thead>
+            <tr>
+              <th style="width:50px">#</th>
+              <th>Problemă</th>
+              <th>Categorie</th>
+              <th>Dificultate</th>
+              <th>Surse</th>
+              <th>Rezolvat</th>
+            </tr>
+          </thead>
+          <tbody id="prob-tbody"></tbody>
+        </table>
+
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">...</button>
+          <button class="page-btn">31</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PROBLEM DETAIL PAGE ===== -->
+  <div class="page" id="page-problem">
+    <div class="problem-layout">
+      <!-- Statement -->
+      <div>
+        <div class="breadcrumb">
+          <a href="#" onclick="navigate('problems');return false;">Probleme</a> /
+          <a href="#" onclick="navigate('problems');return false;">clasa a IX-a</a> /
+          <span id="prob-name-bc">suma</span>
+        </div>
+        <div class="problem-statement">
+          <div class="problem-title" id="prob-detail-title">suma</div>
+          <div class="problem-meta">
+            <span>📋 Nr. <strong id="prob-detail-nr">1</strong></span>
+            <span>⏱ Timp: <strong>0.5 sec</strong></span>
+            <span>💾 Memorie: <strong>64 MB</strong></span>
+            <span>📥 <strong id="prob-io">stdin / stdout</strong></span>
+            <span id="prob-diff-span"><span class="diff-badge diff-easy">Ușoară</span></span>
+          </div>
+
+          <div class="section-title">Cerinţă</div>
+          <div id="prob-cerinta">
+            <p>Se citesc două numere întregi <strong>a</strong> și <strong>b</strong>. Să se calculeze și să se afișeze suma lor.</p>
+          </div>
+
+          <div class="section-title">Date de intrare</div>
+          <div id="prob-intrare">
+            <p>Pe prima linie a fișierului de intrare <code>stdin</code> se găsesc două numere întregi <strong>a</strong> și <strong>b</strong>, separate printr-un spațiu.</p>
+          </div>
+
+          <div class="section-title">Date de ieșire</div>
+          <div id="prob-iesire">
+            <p>Pe prima linie a fișierului de ieșire <code>stdout</code> se va scrie suma <strong>a + b</strong>.</p>
+          </div>
+
+          <div class="section-title">Restricții</div>
+          <ul id="prob-restrictii" style="padding-left:22px; font-size:13.5px; line-height:1.8">
+            <li>-1 000 000 000 ≤ a, b ≤ 1 000 000 000</li>
+          </ul>
+
+          <div class="section-title">Exemple</div>
+          <div class="example-box">
+            <div class="example-header">Exemplul 1</div>
+            <div class="example-cols">
+              <div class="example-col"><h6>Date de intrare</h6><pre id="ex-in">3 5</pre></div>
+              <div class="example-col"><h6>Date de ieșire</h6><pre id="ex-out">8</pre></div>
+            </div>
+          </div>
+          <div class="example-box">
+            <div class="example-header">Exemplul 2</div>
+            <div class="example-cols">
+              <div class="example-col"><h6>Date de intrare</h6><pre>-7 13</pre></div>
+              <div class="example-col"><h6>Date de ieșire</h6><pre>6</pre></div>
+            </div>
+          </div>
+
+          <div class="section-title">Indicații</div>
+          <p id="prob-indicatii" style="font-size:13.5px; line-height:1.7;">Se citesc valorile a și b, se calculează suma lor și se afișează.</p>
+        </div>
+
+        <!-- Solutions tab below -->
+        <div style="margin-top:16px;">
+          <div class="tabs">
+            <div class="tab active">Soluții trimise (0)</div>
+            <div class="tab">Clasament</div>
+            <div class="tab">Discuții</div>
+          </div>
+          <div style="text-align:center; padding:30px; color:var(--text-muted); background:var(--bg-card); border:1px solid var(--border); border-radius:5px;">
+            Nu ai trimis nicio soluție pentru această problemă.
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit panel -->
+      <div>
+        <div class="submit-panel">
+          <div class="panel-header">✏️ Trimite soluție</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>Limbaj de programare</label>
+              <select id="lang-select">
+                <option>C++ (g++ 14)</option>
+                <option>C (gcc 14)</option>
+                <option>Pascal (fpc 3.0)</option>
+                <option>Python 3.9</option>
+                <option>Java 17</option>
+                <option>C# (mono 6)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Cod sursă</label>
+              <textarea id="code-editor" placeholder="#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    long long a, b;
+    cin >> a >> b;
+    cout << a + b;
+    return 0;
+}"></textarea>
+            </div>
+            <button class="btn btn-success" style="width:100%" onclick="submitSolution()">▶ Trimite spre evaluare</button>
+            <div id="verdict" style="display:none"></div>
+          </div>
+        </div>
+
+        <div class="submit-panel" style="margin-top:14px;">
+          <div class="panel-header">📊 Statistici problemă</div>
+          <div class="panel-body">
+            <table style="border:none; font-size:13px;">
+              <tr><td style="border:none; padding:5px 0; color:var(--text-muted)">Total surse trimise:</td><td style="border:none; padding:5px 0; font-weight:700;">14 872</td></tr>
+              <tr><td style="border:none; padding:5px 0; color:var(--text-muted)">Surse corecte (100p):</td><td style="border:none; padding:5px 0; font-weight:700; color:var(--green)">11 204</td></tr>
+              <tr><td style="border:none; padding:5px 0; color:var(--text-muted)">Utilizatori care au rezolvat:</td><td style="border:none; padding:5px 0; font-weight:700;">9 387</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="submit-panel" style="margin-top:14px;">
+          <div class="panel-header">🏷️ Etichete</div>
+          <div class="panel-body">
+            <span class="tag">operatori</span>
+            <span class="tag">variabile</span>
+            <span class="tag">clasa 9</span>
+            <span class="tag">ușoară</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ARTICLES PAGE ===== -->
+  <div class="page" id="page-articles">
+    <div class="articles-layout">
+      <div>
+        <div class="sidebar">
+          <div class="sidebar-title">Resurse</div>
+          <ul class="cat-list">
+            <li><a href="#" onclick="navigate('articles','9');return false;" id="art-cat-9">Clasa a IX-a</a></li>
+            <li><a href="#" onclick="navigate('articles','10');return false;" id="art-cat-10">Clasa a X-a</a></li>
+            <li><a href="#" onclick="navigate('articles','11');return false;" id="art-cat-11">Clasa a XI-a</a></li>
+            <li><a href="#" onclick="navigate('articles','rec');return false;" id="art-cat-rec">Articole recomandate</a></li>
+            <li><a href="#" onclick="navigate('articles','bac');return false;" id="art-cat-bac">Subiecte bacalaureat</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="breadcrumb">pbinfo.ro / <span id="art-breadcrumb">Articole recomandate</span></div>
+        <h2 id="art-page-title" style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:14px;">Articole recomandate</h2>
+        <div id="articles-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ARTICLE FULL ===== -->
+  <div class="page" id="page-article">
+    <div class="articles-layout">
+      <div>
+        <div class="sidebar">
+          <div class="sidebar-title">În acest articol</div>
+          <ul class="cat-list" id="article-toc"></ul>
+        </div>
+      </div>
+      <div>
+        <div class="breadcrumb">
+          <a href="#" onclick="navigate('articles','rec');return false;">Articole</a> / <span id="art-full-bc">titlu</span>
+        </div>
+        <div class="article-full" id="article-full-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SOLUTIONS PAGE ===== -->
+  <div class="page" id="page-solutions">
+    <div style="margin-top:16px;">
+      <h2 style="font-size:18px; font-weight:700; color:var(--blue-dark); margin-bottom:16px;">Soluții</h2>
+
+      <div class="search-bar">
+        <input type="text" placeholder="Caută după utilizator sau problemă...">
+        <select style="padding:7px 10px; border:1px solid var(--border); border-radius:3px; font-family:inherit; font-size:13px; outline:none;">
+          <option>Toate limbajele</option>
+          <option>C++</option>
+          <option>Python</option>
+          <option>Java</option>
+          <option>Pascal</option>
+        </select>
+        <button class="btn btn-primary">Caută</button>
+      </div>
+
+      <table class="solutions-table">
+        <thead>
+          <tr>
+            <th>Problemă</th>
+            <th>Utilizator</th>
+            <th>Limbaj</th>
+            <th>Scor</th>
+            <th>Timp</th>
+            <th>Memorie</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><a href="#" onclick="navigate('problem','suma');return false;">suma</a></td><td>alexmircea</td><td>C++</td><td class="score-100">100</td><td>0.01s</td><td>2.1 MB</td><td>26 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','maxim');return false;">maxim</a></td><td>raduion</td><td>C++</td><td class="score-100">100</td><td>0.02s</td><td>1.8 MB</td><td>25 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','palindrom');return false;">palindrom</a></td><td>stefanpop</td><td>Python</td><td class="score-part">60</td><td>1.2s</td><td>8.4 MB</td><td>25 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','mister');return false;">Mister</a></td><td>mihaelae</td><td>C++</td><td class="score-100">100</td><td>0.18s</td><td>4.2 MB</td><td>24 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','knight');return false;">Knight</a></td><td>catalinv</td><td>Java</td><td class="score-0">0</td><td>TLE</td><td>–</td><td>24 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','sortare');return false;">sortare</a></td><td>ionescuabc</td><td>C++</td><td class="score-100">100</td><td>0.05s</td><td>3.1 MB</td><td>23 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','coddecod');return false;">coddecod</a></td><td>popescum</td><td>C++</td><td class="score-part">80</td><td>0.45s</td><td>5.6 MB</td><td>23 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','eliberare');return false;">Eliberare</a></td><td>georgica99</td><td>C++</td><td class="score-100">100</td><td>0.32s</td><td>12.8 MB</td><td>22 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','crossword');return false;">Crossword</a></td><td>mihnea_v</td><td>C#</td><td class="score-0">0</td><td>0.9s</td><td>–</td><td>22 mar 2026</td></tr>
+          <tr><td><a href="#" onclick="navigate('problem','bitset');return false;">bitset</a></td><td>alexmircea</td><td>C++</td><td class="score-100">100</td><td>0.04s</td><td>2.3 MB</td><td>21 mar 2026</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" style="margin-top:16px">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <button class="page-btn">5</button>
+        <button class="page-btn">...</button>
+        <button class="page-btn">148</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2013–2026 pbinfo.ro · <a href="#">Contact</a> · <a href="#">Donații</a> · <a href="#">Ajutor</a> · <a href="#">Termeni și condiții</a></p>
+  <p style="margin-top:6px; opacity:0.6;">Site realizat ca proiect educațional · Versiune neoficială fără autentificare</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-title">Autentificare</span>
+      <button onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="form-group">
+        <label>Utilizator sau email</label>
+        <input type="text" placeholder="utilizator / email">
+      </div>
+      <div class="form-group">
+        <label>Parolă</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="alert('Aceasta este o versiune demo fără bază de date.')">Autentificare</button>
+      <a href="#" style="font-size:12px; text-align:center; color:var(--text-muted);" onclick="openModal('register');return false;">Creare cont nou</a>
+      <a href="#" style="font-size:12px; text-align:center; color:var(--text-muted);">Recuperare parolă</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== DATA ==========
+const problems = [
+  {id:1,  name:'suma',       cat:'Variabile',           class:'9',  diff:'easy',   solved:14872},
+  {id:2,  name:'produs',     cat:'Variabile',           class:'9',  diff:'easy',   solved:11203},
+  {id:3,  name:'medie',      cat:'Variabile',           class:'9',  diff:'easy',   solved:9872},
+  {id:4,  name:'maxim',      cat:'Condiționale',        class:'9',  diff:'easy',   solved:13401},
+  {id:5,  name:'minim2',     cat:'Condiționale',        class:'9',  diff:'easy',   solved:12100},
+  {id:6,  name:'palindrom',  cat:'Șiruri',              class:'9',  diff:'medium', solved:7832},
+  {id:7,  name:'sortare',    cat:'Tablouri',            class:'9',  diff:'medium', solved:8920},
+  {id:8,  name:'fibonacci',  cat:'Funcții',             class:'9',  diff:'medium', solved:6543},
+  {id:9,  name:'cautbin',    cat:'Tablouri',            class:'9',  diff:'medium', solved:5412},
+  {id:10, name:'coddecod',   cat:'Șiruri',              class:'9',  diff:'hard',   solved:2341},
+  {id:11, name:'deceneu',    cat:'Tablouri',            class:'9',  diff:'medium', solved:3210},
+  {id:12, name:'mario2',     cat:'Condiționale',        class:'9',  diff:'medium', solved:4102},
+  {id:20, name:'mister',     cat:'Grafuri',             class:'10', diff:'hard',   solved:1823},
+  {id:21, name:'inghetata',  cat:'Programare dinamică', class:'10', diff:'medium', solved:3102},
+  {id:22, name:'unuzero1',   cat:'Tablouri',            class:'10', diff:'medium', solved:5020},
+  {id:23, name:'pisicesc',   cat:'Șiruri',              class:'10', diff:'hard',   solved:1401},
+  {id:24, name:'minish',     cat:'Stivă',               class:'10', diff:'medium', solved:2804},
+  {id:30, name:'eliberare',  cat:'Grafuri',             class:'11', diff:'hard',   solved:892},
+  {id:31, name:'knight',     cat:'Grafuri',             class:'11', diff:'hard',   solved:743},
+  {id:32, name:'rotatii',    cat:'Geometrie',           class:'11', diff:'medium', solved:1203},
+  {id:33, name:'crossword',  cat:'Backtracking',        class:'11', diff:'hard',   solved:621},
+  {id:34, name:'esentiale',  cat:'Grafuri',             class:'11', diff:'hard',   solved:508},
+];
+
+const problemDetails = {
+  suma:      {title:'suma', nr:1, cerinta:'Se citesc două numere întregi <strong>a</strong> și <strong>b</strong>. Să se calculeze și să se afișeze suma lor.', intrare:'Fișierul de intrare <code>stdin</code> conține două numere întregi <strong>a</strong> și <strong>b</strong>, separate printr-un spațiu.', iesire:'Pe prima linie a fișierului de ieșire <code>stdout</code> se va scrie suma <strong>a + b</strong>.', restrictii:['−10⁹ ≤ a, b ≤ 10⁹'], exIn:'3 5', exOut:'8', diff:'easy', io:'stdin / stdout', indicatii:'Se citesc valorile a și b, se calculează suma lor și se afișează.'},
+  maxim:     {title:'maxim', nr:4, cerinta:'Se citesc <strong>n</strong> numere întregi. Să se afișeze maximul lor.', intrare:'Pe prima linie se citește n. Pe a doua linie se citesc n numere întregi.', iesire:'Se va afișa valoarea maximă din cele n numere.', restrictii:['1 ≤ n ≤ 100 000', '−10⁹ ≤ ai ≤ 10⁹'], exIn:'5\n3 1 7 2 9', exOut:'9', diff:'easy', io:'stdin / stdout', indicatii:'Se parcurge vectorul și se reține maximul curent.'},
+  palindrom: {title:'palindrom', nr:6, cerinta:'Se citește un șir de caractere <strong>s</strong>. Verificați dacă este palindrom.', intrare:'Pe prima linie se citește șirul <strong>s</strong>.', iesire:'Se afișează <code>DA</code> dacă șirul este palindrom, <code>NU</code> altfel.', restrictii:['1 ≤ |s| ≤ 100 000', 'șirul conține doar litere mici'], exIn:'abacaba', exOut:'DA', diff:'medium', io:'stdin / stdout', indicatii:'Se compară caracterele de la capete spre mijloc.'},
+  mister:    {title:'Mister', nr:4984, cerinta:'Ionuț are un tablou de <strong>n</strong> numere. El dorește să afle cel mai lung subșir crescător.', intrare:'Pe prima linie se citește n. Pe a doua linie se citesc n numere întregi.', iesire:'Se afișează lungimea celui mai lung subșir crescător.', restrictii:['1 ≤ n ≤ 100 000', '1 ≤ ai ≤ 10⁹'], exIn:'6\n3 1 4 1 5 9', exOut:'4', diff:'hard', io:'stdin / stdout', indicatii:'Problema se rezolvă cu algoritmul LIS în O(n log n) folosind căutare binară.'},
+  knight:    {title:'Knight', nr:4980, cerinta:'Se dă o tablă de șah de dimensiune <strong>n×m</strong>. Un cal este plasat în poziția (r,c). Câte celule poate vizita calul în exact <strong>k</strong> mutări?', intrare:'Se citesc n, m, r, c, k.', iesire:'Numărul de celule distincte vizitabile.', restrictii:['1 ≤ n,m ≤ 1000', '1 ≤ k ≤ 5'], exIn:'8 8 1 1 3', exOut:'36', diff:'hard', io:'stdin / stdout', indicatii:'BFS pe tablă, cu nivelurile reprezentând numărul de mutări.'},
+};
+
+const articleData = {
+  aranjamente: {
+    title: 'Generarea aranjamentelor',
+    meta: 'Autor: prof. Dan Pracsiu · Categoria: Backtracking · Clasa a XI-a',
+    content: `
+      <p>Aranjamentele de n luate câte k sunt mulțimile ordonate de k elemente distincte alese din n elemente date. Numărul de astfel de aranjamente este A(n,k) = n! / (n−k)!.</p>
+      <h2>Algoritm de generare</h2>
+      <p>Folosim tehnica backtracking. La fiecare pas alegem un element nevizitat și îl adăugăm la soluția curentă, recursând.</p>
+      <pre>#include &lt;iostream&gt;
+using namespace std;
+int n, k, a[100];
+bool viz[100];
+
+void back(int p) {
+    if (p == k + 1) {
+        for (int i = 1; i &lt;= k; i++)
+            cout &lt;&lt; a[i] &lt;&lt; " ";
+        cout &lt;&lt; "\\n";
+        return;
+    }
+    for (int i = 1; i &lt;= n; i++) {
+        if (!viz[i]) {
+            a[p] = i;
+            viz[i] = true;
+            back(p + 1);
+            viz[i] = false;
+        }
+    }
+}
+
+int main() {
+    cin &gt;&gt; n &gt;&gt; k;
+    back(1);
+    return 0;
+}</pre>
+      <h2>Complexitate</h2>
+      <p>Complexitatea timp este O(A(n,k)) în cel mai rău caz, deoarece se generează toate aranjamentele posibile.</p>
+      <h3>Observații</h3>
+      <ul>
+        <li>Dacă k = n obținem toate permutările lui n elemente.</li>
+        <li>Dacă elementele nu trebuie să fie distincte obținem produsul cartezian.</li>
+        <li>Ordinea de alegere contează (spre deosebire de combinații).</li>
+      </ul>
+    `
+  },
+  polimorfism: {
+    title: 'Polimorfism în C++',
+    meta: 'Categoria: Programare orientată pe obiecte · Clasa a XI-a',
+    content: `
+      <p>Polimorfismul este unul din principiile fundamentale ale programării orientate pe obiecte. Permite tratarea uniformă a obiectelor din clase diferite, bazate pe o interfață comună.</p>
+      <h2>Polimorfism virtual</h2>
+      <p>În C++, polimorfismul la rulare se realizează prin funcții virtuale:</p>
+      <pre>#include &lt;iostream&gt;
+using namespace std;
+
+class Animal {
+public:
+    virtual void sunet() {
+        cout &lt;&lt; "..." &lt;&lt; endl;
+    }
+    virtual ~Animal() {}
+};
+
+class Caine : public Animal {
+public:
+    void sunet() override {
+        cout &lt;&lt; "Ham! Ham!" &lt;&lt; endl;
+    }
+};
+
+class Pisica : public Animal {
+public:
+    void sunet() override {
+        cout &lt;&lt; "Miau!" &lt;&lt; endl;
+    }
+};
+
+int main() {
+    Animal* a1 = new Caine();
+    Animal* a2 = new Pisica();
+    a1-&gt;sunet();  // Ham!
+    a2-&gt;sunet();  // Miau!
+    delete a1; delete a2;
+}</pre>
+      <h2>Funcții virtuale pure</h2>
+      <p>O clasă cu cel puțin o funcție virtuală pură devine clasă abstractă și nu poate fi instanțiată direct.</p>
+    `
+  },
+  stl: {
+    title: 'STL – Concepte fundamentale',
+    meta: 'Categoria: C++ STL · Clasa a X-a',
+    content: `
+      <p>Standard Template Library (STL) este o bibliotecă C++ ce furnizează containere, algoritmi și iteratori generici.</p>
+      <h2>Containere principale</h2>
+      <ul>
+        <li><strong>vector&lt;T&gt;</strong> – tablou dinamic cu acces aleator O(1)</li>
+        <li><strong>list&lt;T&gt;</strong> – listă dublu înlănțuită</li>
+        <li><strong>map&lt;K,V&gt;</strong> – dicționar ordonat (arbore roșu-negru)</li>
+        <li><strong>unordered_map&lt;K,V&gt;</strong> – hashtable, O(1) mediu</li>
+        <li><strong>set&lt;T&gt;</strong> – mulțime ordonată fără duplicate</li>
+        <li><strong>priority_queue&lt;T&gt;</strong> – coadă cu priorități (heap)</li>
+      </ul>
+      <h2>Algoritmi comuni</h2>
+      <pre>#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+vector&lt;int&gt; v = {5, 2, 8, 1, 9};
+sort(v.begin(), v.end());          // sortare
+reverse(v.begin(), v.end());       // inversare
+int mx = *max_element(v.begin(), v.end()); // maxim
+binary_search(v.begin(), v.end(), 5);      // cautare binara</pre>
+    `
+  }
+};
+
+// ========== NAVIGATION ==========
+let currentClass = '9';
+
+function navigate(page, param) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  if (page === 'home') {
+    document.getElementById('page-home').classList.add('active');
+  } else if (page === 'problems') {
+    document.getElementById('page-problems').classList.add('active');
+    const cls = param || '9';
+    filterProblems(cls);
+  } else if (page === 'problem') {
+    document.getElementById('page-problem').classList.add('active');
+    loadProblem(param);
+  } else if (page === 'articles') {
+    document.getElementById('page-articles').classList.add('active');
+    loadArticles(param || 'rec');
+  } else if (page === 'article') {
+    document.getElementById('page-article').classList.add('active');
+    loadArticle(param);
+  } else if (page === 'solutions') {
+    document.getElementById('page-solutions').classList.add('active');
+  } else if (page === 'top') {
+    navigate('home');
+  }
+
+  window.scrollTo(0,0);
+}
+
+function filterProblems(cls) {
+  currentClass = cls;
+
+  // Update sidebar active
+  document.querySelectorAll('.cat-list a').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById('cat-'+cls);
+  if (el) el.classList.add('active');
+
+  const titles = {
+    '9': 'Probleme – clasa a IX-a',
+    '10': 'Probleme – clasa a X-a',
+    '11': 'Probleme – clasa a XI-a',
+    'concurs': 'Probleme din concursuri',
+    'toate': 'Toate problemele',
+    'exercitii': 'Exerciții'
+  };
+
+  document.getElementById('prob-breadcrumb').textContent = titles[cls] || 'Probleme';
+  document.getElementById('prob-page-title').textContent = titles[cls] || 'Probleme';
+
+  renderProblems(cls);
+}
+
+function renderProblems(cls) {
+  const filtered = cls === 'toate' || cls === 'exercitii' || cls === 'concurs'
+    ? problems
+    : problems.filter(p => p.class === cls);
+
+  const q = document.getElementById('prob-search') ? document.getElementById('prob-search').value.toLowerCase() : '';
+  const shown = q ? filtered.filter(p => p.name.toLowerCase().includes(q)) : filtered;
+
+  const tbody = document.getElementById('prob-tbody');
+  tbody.innerHTML = shown.map(p => `
+    <tr>
+      <td style="color:var(--text-muted); font-size:12px">${p.id}</td>
+      <td><a href="#" onclick="navigate('problem','${p.name}');return false;" style="font-weight:600">${p.name}</a></td>
+      <td><span class="tag">${p.cat}</span></td>
+      <td><span class="diff-badge diff-${p.diff}">${p.diff === 'easy' ? 'Ușoară' : p.diff === 'medium' ? 'Medie' : 'Grea'}</span></td>
+      <td style="color:var(--text-muted); font-size:12px">${p.solved.toLocaleString()}</td>
+      <td><span class="unsolved-icon">○</span></td>
+    </tr>
+  `).join('');
+}
+
+function filterTable() {
+  renderProblems(currentClass);
+}
+
+function switchTab(el, mode) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ========== PROBLEM DETAIL ==========
+function loadProblem(name) {
+  const d = problemDetails[name] || problemDetails['suma'];
+  document.getElementById('prob-name-bc').textContent = d.title;
+  document.getElementById('prob-detail-title').textContent = d.title;
+  document.getElementById('prob-detail-nr').textContent = d.nr;
+  document.getElementById('prob-io').textContent = d.io;
+  document.getElementById('prob-cerinta').innerHTML = '<p>' + d.cerinta + '</p>';
+  document.getElementById('prob-intrare').innerHTML = '<p>' + d.intrare + '</p>';
+  document.getElementById('prob-iesire').innerHTML = '<p>' + d.iesire + '</p>';
+  document.getElementById('prob-restrictii').innerHTML = d.restrictii.map(r => '<li>' + r + '</li>').join('');
+  document.getElementById('ex-in').textContent = d.exIn;
+  document.getElementById('ex-out').textContent = d.exOut;
+  document.getElementById('prob-indicatii').textContent = d.indicatii;
+
+  const diffMap = {easy:'<span class="diff-badge diff-easy">Ușoară</span>', medium:'<span class="diff-badge diff-medium">Medie</span>', hard:'<span class="diff-badge diff-hard">Grea</span>'};
+  document.getElementById('prob-diff-span').innerHTML = diffMap[d.diff];
+  document.getElementById('verdict').style.display = 'none';
+  document.getElementById('code-editor').value = '';
+}
+
+// ========== SUBMIT ==========
+function submitSolution() {
+  const code = document.getElementById('code-editor').value.trim();
+  const vbox = document.getElementById('verdict');
+  if (!code) {
+    vbox.style.display = 'block';
+    vbox.className = 'verdict-box verdict-wa';
+    vbox.innerHTML = '<strong>Eroare</strong>Codul sursă este gol.';
+    return;
+  }
+  vbox.style.display = 'block';
+  vbox.className = 'verdict-box verdict-pending';
+  vbox.innerHTML = '<strong>⏳ Se evaluează...</strong>Trimiterea este în procesare.';
+
+  setTimeout(() => {
+    const scores = [100, 100, 80, 60, 40, 0];
+    const sc = scores[Math.floor(Math.random() * scores.length)];
+    if (sc === 100) {
+      vbox.className = 'verdict-box verdict-ac';
+      vbox.innerHTML = `<strong>✔ Acceptat (100 p)</strong>Toate testele au trecut. Timp: 0.02s, Memorie: 2.1 MB`;
+    } else if (sc > 0) {
+      vbox.className = 'verdict-box verdict-tle';
+      vbox.innerHTML = `<strong>~ Parțial (${sc} p)</strong>Unele teste au eșuat. Verificați soluția.`;
+    } else {
+      vbox.className = 'verdict-box verdict-wa';
+      vbox.innerHTML = `<strong>✗ Răspuns greșit (0 p)</strong>Testul 1 a eșuat. Verificați logica programului.`;
+    }
+  }, 1800);
+}
+
+// ========== ARTICLES ==========
+const articlesDb = [
+  {id:'aranjamente', title:'Generarea aranjamentelor', cat:'rec', meta:'Backtracking · Clasa a XI-a', preview:'Aranjamentele de n luate câte k sunt mulțimile ordonate de k elemente distincte...'},
+  {id:'polimorfism', title:'Polimorfism în C++', cat:'11', meta:'POO · Clasa a XI-a', preview:'Polimorfismul permite tratarea uniformă a obiectelor din clase diferite prin funcții virtuale...'},
+  {id:'putere', title:'Ridicarea la putere rapidă', cat:'rec', meta:'Algoritmi · Clasa a X-a', preview:'Calcularea lui a^n în O(log n) folosind descompunerea în puteri ale lui 2...'},
+  {id:'stars', title:'Stars and bars', cat:'rec', meta:'Combinatorică · Clasa a X-a', preview:'Tehnica stars and bars este folosită pentru numărarea soluțiilor întregi nenegative ale ecuațiilor...'},
+  {id:'bitset', title:'C++ STL bitset', cat:'10', meta:'STL · Clasa a X-a', preview:'bitset&lt;N&gt; este un container optimizat pentru stocarea și manipularea unui set de biți...'},
+  {id:'vector', title:'C++ vector – scurt tutorial', cat:'9', meta:'STL · Clasa a IX-a', preview:'vector&lt;T&gt; este containerul cel mai folosit din STL, un tablou dinamic cu acces aleator...'},
+  {id:'stl', title:'STL – Concepte fundamentale', cat:'rec', meta:'STL · Clasa a X-a', preview:'Standard Template Library furnizează containere, algoritmi și iteratori generici...'},
+  {id:'html-culori', title:'Limbajul HTML – culori', cat:'9', meta:'HTML · Clasa a IX-a', preview:'Culorile în HTML pot fi specificate prin nume, cod hexazecimal, rgb() sau hsl()...'},
+  {id:'subiecte-bac', title:'Bacalaureat 2024 – Informatică', cat:'bac', meta:'Examen · Bacalaureat', preview:'Subiectele de la examenul de bacalaureat la informatică din sesiunea 2024...'},
+  {id:'grafuri', title:'Grafuri – introducere', cat:'11', meta:'Grafuri · Clasa a XI-a', preview:'Un graf G = (V, E) constă dintr-o mulțime de vârfuri și muchii. Grafurile sunt fundamentale în informatică...'},
+];
+
+function loadArticles(cat) {
+  const catNames = {'9':'Resurse clasa a IX-a','10':'Resurse clasa a X-a','11':'Resurse clasa a XI-a','rec':'Articole recomandate','bac':'Subiecte bacalaureat'};
+  document.getElementById('art-breadcrumb').textContent = catNames[cat] || 'Articole';
+  document.getElementById('art-page-title').textContent = catNames[cat] || 'Articole';
+
+  document.querySelectorAll('[id^="art-cat-"]').forEach(el => el.classList.remove('active'));
+  const ac = document.getElementById('art-cat-'+cat);
+  if(ac) ac.classList.add('active');
+
+  const filtered = cat === 'toate' ? articlesDb : articlesDb.filter(a => a.cat === cat || a.cat === 'rec' && cat === 'rec');
+  const shown = cat === 'rec' ? articlesDb.filter(a => a.cat === 'rec') : articlesDb.filter(a => a.cat === cat);
+
+  document.getElementById('articles-list').innerHTML = (shown.length ? shown : articlesDb).map(a => `
+    <div class="article-card" onclick="navigate('article','${a.id}')">
+      <h3>${a.title}</h3>
+      <div class="art-meta">${a.meta}</div>
+      <p>${a.preview}</p>
+    </div>
+  `).join('');
+}
+
+function loadArticle(id) {
+  const d = articleData[id] || articleData['stl'];
+  document.getElementById('art-full-bc').textContent = d.title;
+  document.getElementById('article-full-content').innerHTML = `
+    <h1>${d.title}</h1>
+    <div class="art-meta">${d.meta}</div>
+    ${d.content}
+    <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--border); font-size:13px; color:var(--text-muted)">
+      <a href="#" onclick="navigate('articles','rec');return false;">← Înapoi la articole</a>
+    </div>
+  `;
+  document.getElementById('article-toc').innerHTML = `
+    <li><a href="#">Introducere</a></li>
+    <li><a href="#">Algoritm</a></li>
+    <li><a href="#">Exemple</a></li>
+    <li><a href="#">Complexitate</a></li>
+  `;
+}
+
+// ========== MODAL ==========
+function openModal(type) {
+  document.getElementById('modal-overlay').classList.add('open');
+  if (type === 'register') {
+    document.getElementById('modal-title').textContent = 'Creare cont nou';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="form-group"><label>Utilizator</label><input type="text" placeholder="utilizator (min. 4 caractere)"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="email@exemplu.ro"></div>
+      <div class="form-group"><label>Parolă</label><input type="password" placeholder="••••••••"></div>
+      <div class="form-group"><label>Confirmare parolă</label><input type="password" placeholder="••••••••"></div>
+    `;
+  } else {
+    document.getElementById('modal-title').textContent = 'Autentificare';
+    document.getElementById('modal-body').innerHTML = `
+      <div class="form-group"><label>Utilizator sau email</label><input type="text" placeholder="utilizator / email"></div>
+      <div class="form-group"><label>Parolă</label><input type="password" placeholder="••••••••"></div>
+    `;
+  }
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+// ========== INIT ==========
+navigate('home');
+renderProblems('9');
+loadArticles('rec');
+</script>
+</body>
+</html>
